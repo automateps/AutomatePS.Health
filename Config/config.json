@@ -1,0 +1,315 @@
+{
+    "CategoryCountInformationLevel": "Warning",
+    "Categories": [
+        {
+            "Name": "General",
+            "ShowCount": false,
+            "Enabled": true,
+            "SortOrder": 1,
+            "HealthChecks": [
+                {
+                    "Function": "Get-AMHCServerInformation",
+                    "Importance": "Information",
+                    "ShowCount": false,
+                    "Enabled": true,
+                    "SortOrder": 1
+                }
+            ]
+        },
+        {
+            "Name": "Workflows",
+            "ShowCount": true,
+            "Enabled": true,
+            "SortOrder": 2,
+            "HealthChecks": [
+                {
+                    "Function": "Get-AMHCDisabledWorkflow",
+                    "Importance": "Information",
+                    "ShowCount": true,
+                    "Enabled": true,
+                    "SortOrder": 1
+                },
+                {
+                    "Function": "Get-AMHCEmptyWorkflow",
+                    "Importance": "Warning",
+                    "ShowCount": true,
+                    "Enabled": true,
+                    "SortOrder": 2
+                },
+                {
+                    "Function": "Get-AMHCRecursiveWorkflow",
+                    "Importance": "Warning",
+                    "ShowCount": true,
+                    "Enabled": true,
+                    "SortOrder": 3
+                },
+                {
+                    "Function": "Get-AMHCWorkflowNoTrigger",
+                    "Importance": "Information",
+                    "ShowCount": true,
+                    "Enabled": true,
+                    "SortOrder": 4
+                },
+                {
+                    "Function": "Get-AMHCDisabledWorkflowItem",
+                    "Importance": "Information",
+                    "ShowCount": true,
+                    "Enabled": true,
+                    "SortOrder": 5
+                },
+                {
+                    "Function": "Get-AMHCDisconnectedWorkflowItem",
+                    "Importance": "Warning",
+                    "ShowCount": true,
+                    "Enabled": true,
+                    "SortOrder": 6
+                },
+                {
+                    "Function": "Get-AMHCUnbuiltWorkflowItem",
+                    "Importance": "Error",
+                    "ShowCount": true,
+                    "Enabled": true,
+                    "SortOrder": 7
+                },
+                {
+                    "Function": "Get-AMHCInvalidWorkflowAgent",
+                    "Importance": "Error",
+                    "ShowCount": true,
+                    "Enabled": true,
+                    "SortOrder": 8
+                },
+                {
+                    "Function": "Get-AMHCDisconnectedWorkflowLink",
+                    "Importance": "Error",
+                    "ShowCount": true,
+                    "Enabled": true,
+                    "SortOrder": 9
+                },
+                {
+                    "Function": "Get-AMHCDuplicateWorkflowLink",
+                    "Importance": "Warning",
+                    "ShowCount": true,
+                    "Enabled": true,
+                    "SortOrder": 10
+                },
+                {
+                    "Function": "Get-AMHCWorkflowEvaluationObjectNonResultLink",
+                    "Importance": "Warning",
+                    "ShowCount": true,
+                    "Enabled": true,
+                    "SortOrder": 11
+                },
+                {
+                    "Function": "Get-AMHCWorkflowNoFailureLink",
+                    "Importance": "Information",
+                    "ShowCount": true,
+                    "Enabled": true,
+                    "SortOrder": 12
+                },
+                {
+                    "Function": "Get-AMHCDuplicateWorkflowVariable",
+                    "Importance": "Error",
+                    "ShowCount": true,
+                    "Enabled": true,
+                    "SortOrder": 13
+                }
+            ]
+        },
+        {
+            "Name": "Tasks",
+            "ShowCount": true,
+            "Enabled": true,
+            "SortOrder": 3,
+            "HealthChecks": [
+                {
+                    "Function": "Get-AMHCDisabledTask",
+                    "Importance": "Information",
+                    "ShowCount": true,
+                    "Enabled": true,
+                    "SortOrder": 1
+                },
+                {
+                    "Function": "Get-AMHCDuplicateTask",
+                    "Importance": "Information",
+                    "ShowCount": true,
+                    "Enabled": true,
+                    "SortOrder": 2
+                },
+                {
+                    "Function": "Get-AMHCUnusedTask",
+                    "Importance": "Information",
+                    "ShowCount": true,
+                    "Enabled": true,
+                    "SortOrder": 3
+                },
+                {
+                    "Function": "Get-AMHCTaskAmlNotXml",
+                    "Importance": "Warning",
+                    "ShowCount": true,
+                    "Enabled": true,
+                    "SortOrder": 4
+                },
+                {
+                    "Function": "Get-AMHCTaskVersionOld",
+                    "Importance": "Warning",
+                    "ShowCount": true,
+                    "Enabled": true,
+                    "SortOrder": 5
+                }
+            ]
+        },
+        {
+            "Name": "Conditions",
+            "ShowCount": true,
+            "Enabled": true,
+            "SortOrder": 4,
+            "HealthChecks": [
+                {
+                    "Function": "Get-AMHCDisabledCondition",
+                    "Importance": "Information",
+                    "ShowCount": true,
+                    "Enabled": true,
+                    "SortOrder": 1
+                },
+                {
+                    "Function": "Get-AMHCUnusedCondition",
+                    "Importance": "Information",
+                    "ShowCount": true,
+                    "Enabled": true,
+                    "SortOrder": 2
+                },
+                {
+                    "Function": "Get-AMHCScheduleInvalidLaunchDate",
+                    "Importance": "Warning",
+                    "ShowCount": true,
+                    "Enabled": true,
+                    "SortOrder": 3
+                }
+            ]
+        },
+        {
+            "Name": "Processes",
+            "ShowCount": true,
+            "Enabled": true,
+            "SortOrder": 5,
+            "HealthChecks": [
+                {
+                    "Function": "Get-AMHCDisabledProcess",
+                    "Importance": "Information",
+                    "ShowCount": true,
+                    "Enabled": true,
+                    "SortOrder": 1
+                },
+                {
+                    "Function": "Get-AMHCDuplicateProcess",
+                    "Importance": "Information",
+                    "ShowCount": true,
+                    "Enabled": true,
+                    "SortOrder": 2
+                },
+                {
+                    "Function": "Get-AMHCUnusedProcess",
+                    "Importance": "Information",
+                    "ShowCount": true,
+                    "Enabled": true,
+                    "SortOrder": 3
+                }
+            ]
+        },
+        {
+            "Name": "Agents",
+            "ShowCount": true,
+            "Enabled": true,
+            "SortOrder": 6,
+            "HealthChecks": [
+                {
+                    "Function": "Get-AMHCDisabledAgent",
+                    "Importance": "Information",
+                    "ShowCount": true,
+                    "Enabled": true,
+                    "SortOrder": 1
+                },
+                {
+                    "Function": "Get-AMHCUnusedAgent",
+                    "Importance": "Information",
+                    "ShowCount": true,
+                    "Enabled": true,
+                    "SortOrder": 2
+                },
+                {
+                    "Function": "Get-AMHCOfflineAgent",
+                    "Importance": "Warning",
+                    "ShowCount": true,
+                    "Enabled": true,
+                    "SortOrder": 3
+                }
+            ]
+        },
+        {
+            "Name": "AgentGroups",
+            "ShowCount": true,
+            "Enabled": true,
+            "SortOrder": 7,
+            "HealthChecks": [
+                {
+                    "Function": "Get-AMHCDisabledAgentGroup",
+                    "Importance": "Information",
+                    "ShowCount": true,
+                    "Enabled": true,
+                    "SortOrder": 1
+                },
+                {
+                    "Function": "Get-AMHCEmptyAgentGroup",
+                    "Importance": "Information",
+                    "ShowCount": true,
+                    "Enabled": true,
+                    "SortOrder": 2
+                },
+                {
+                    "Function": "Get-AMHCUnusedAgentGroup",
+                    "Importance": "Information",
+                    "ShowCount": true,
+                    "Enabled": true,
+                    "SortOrder": 3
+                }
+            ]
+        },
+        {
+            "Name": "Users",
+            "ShowCount": true,
+            "Enabled": true,
+            "SortOrder": 8,
+            "HealthChecks": [
+                {
+                    "Function": "Get-AMHCUsersNoAccess",
+                    "Importance": "Information",
+                    "ShowCount": true,
+                    "Enabled": true,
+                    "SortOrder": 1
+                }
+            ]
+        },
+        {
+            "Name": "UserGroups",
+            "ShowCount": true,
+            "Enabled": true,
+            "SortOrder": 9,
+            "HealthChecks": [
+                {
+                    "Function": "Get-AMHCDisabledUserGroup",
+                    "Importance": "Information",
+                    "ShowCount": true,
+                    "Enabled": true,
+                    "SortOrder": 1
+                },
+                {
+                    "Function": "Get-AMHCEmptyUserGroup",
+                    "Importance": "Information",
+                    "ShowCount": true,
+                    "Enabled": true,
+                    "SortOrder": 2
+                }
+            ]
+        }
+    ]
+}
