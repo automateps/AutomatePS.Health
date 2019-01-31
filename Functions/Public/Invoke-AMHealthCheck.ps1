@@ -69,7 +69,7 @@ function Invoke-AMHealthCheck {
                     }
                     Write-Verbose "Server $($c.Alias): Running health check $($category.Name) - $($healthCheck.Function)"
                     $output = Invoke-Expression -Command ($healthCheck.Function + ' @splat')
-                    $results += [AMHealthCheckResult]::new($category.Name, $healthCheck.Function, $output, $c.Alias)
+                    $results += [AMHealthCheckResult]::new($category.Name, $healthCheck.Function, $healthCheck.Importance, $output, $c.Alias)
                 } else {
                     Write-Warning "Could not find health check $($healthCheck.Function)!"
                 }
