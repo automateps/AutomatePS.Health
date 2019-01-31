@@ -78,7 +78,7 @@ function Invoke-AMHealthCheck {
         if ($PSBoundParameters.ContainsKey("OutputPath")) {
             if (Test-Path -Path $OutputPath) {
                 $countedHealthChecks = $config.Categories.HealthChecks | Where-Object {[AMHealthCheckImportance]$_.Importance -ge [AMHealthCheckImportance]$config.CategoryCountInformationLevel}
-                Document "Automate_Health_Check_$($c.Alias)_$(Get-Date -Format "yyyyMMddhhmmss")" {
+                Document "Automate_Health_Check_$($c.Alias.Replace(":","_"))_$(Get-Date -Format "yyyyMMddhhmmss")" {
                     Style -Name "InformationHealthCheckHeader" -Size 12 -Color Gray
                     Style -Name "WarningHealthCheckHeader" -Size 12 -Color Orange
                     Style -Name "ErrorHealthCheckHeader" -Size 12 -Color Red
