@@ -8,6 +8,9 @@ function Get-AMHCDuplicateWorkflowLink {
 
         .PARAMETER Workflows
             The workflows to perform health check against
+
+        .PARAMETER Repository
+            The workflows, tasks, conditions and processes to perform health check against
     #>
     [CmdletBinding()]
     param (
