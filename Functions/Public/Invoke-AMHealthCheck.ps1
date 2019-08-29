@@ -6,11 +6,8 @@ function Invoke-AMHealthCheck {
         .DESCRIPTION
             Invoke-AMHealthCheck dynamically loads health checks from the Plugins folder and performs them against Automate Enterprise
 
-        .PARAMETER OutputPath
-            The location to save the health check results
-
-        .PARAMETER OutputFormat
-            The format to save the health check results in: HTML, Word, Text, XML
+        .PARAMETER CustomConfigPath
+            The path to a JSON file containing health check configuration settings.  This file can include new, custom health checks, or modifications to built in health checks.
 
         .PARAMETER Connection
             The Automate Enterprise management server.
@@ -18,10 +15,7 @@ function Invoke-AMHealthCheck {
     [CmdletBinding()]
     param (
         [ValidateScript({Test-Path -Path $_})]
-        $OutputPath,
-
-        [ValidateSet("HTML","Word","Text","XML")]
-        $OutputFormat = "HTML",
+        $CustomConfigPath,
 
         [ValidateNotNullOrEmpty()]
         $Connection
@@ -54,7 +48,11 @@ function Invoke-AMHealthCheck {
         $objectCache[$c.Alias].Add("AllUsers",     @($objectCache[$c.Alias].Users) + @($objectCache[$c.Alias].UserGroups))
         $objectCache[$c.Alias].Add("Repository",   @($objectCache[$c.Alias].Workflows) + @($objectCache[$c.Alias].Tasks) + @($objectCache[$c.Alias].Conditions) + @($objectCache[$c.Alias].Processes))
 
-        $config = Get-AMHealthCheckConfiguration
+        if ($CustomConfigPath) {
+            $config = Get-AMHealthCheckConfiguration -CustomConfigPath $CustomConfigPath
+        } else {
+            $config = Get-AMHealthCheckConfiguration
+        }
         foreach ($category in ($config.Categories | Where-Object {$_.Enabled} | Sort-Object -Property "SortOrder")) {
             foreach ($healthCheck in ($category.HealthChecks | Where-Object {$_.Enabled} | Sort-Object -Property "SortOrder")) {
                 if (Get-Command -Name $healthCheck.Function -ErrorAction SilentlyContinue) {
@@ -64,76 +62,21 @@ function Invoke-AMHealthCheck {
                         if ($objectCache[$c.Alias].ContainsKey($parameter)) {
                             $splat.Add($parameter, $objectCache[$c.Alias][$parameter])
                         } else {
-                            Write-Warning "Could not find data for parameter -$parameter in health check $($healthCheck.Function)!"
+                            Write-Warning "Could not find data for parameter -$parameter in health check function $($healthCheck.Function)!"
                         }
                     }
-                    Write-Verbose "Server $($c.Alias): Running health check $($category.Name) - $($healthCheck.Function)"
+                    Write-Verbose "Server $($c.Alias): Running health check $($category.Name) - $($healthCheck.Name)"
                     $output = Invoke-Expression -Command ($healthCheck.Function + ' @splat')
-                    $results += [AMHealthCheckResult]::new($category.Name, $healthCheck.Function, $healthCheck.Importance, $output, $c.Alias)
+                    if ($healthCheck.ShowCount) {
+                        $healthCheckResultCount = ($output | Measure-Object).Count
+                        $healthCheckName = "$($healthCheck.Name) : $healthCheckResultCount Objects"
+                    } else {
+                        $healthCheckName = $healthCheck.Name
+                    }
+                    $results += [AMHealthCheckResult]::new($category.Name, $healthCheckName, $healthCheck.Description, $healthCheck.Function, $healthCheck.Importance, $output, $c.Alias)
                 } else {
                     Write-Warning "Could not find health check $($healthCheck.Function)!"
                 }
-            }
-        }
-        if ($PSBoundParameters.ContainsKey("OutputPath")) {
-            if (Test-Path -Path $OutputPath) {
-                $countedHealthChecks = $config.Categories.HealthChecks | Where-Object {[AMHealthCheckImportance]$_.Importance -ge [AMHealthCheckImportance]$config.CategoryCountInformationLevel}
-                Document "Automate_Health_Check_$($c.Alias.Replace(":","_"))_$(Get-Date -Format "yyyyMMddhhmmss")" {
-                    Style -Name "InformationHealthCheckHeader" -Size 12 -Color Gray
-                    Style -Name "WarningHealthCheckHeader" -Size 12 -Color Orange
-                    Style -Name "ErrorHealthCheckHeader" -Size 12 -Color Red
-                    DocumentOption -Margin 24
-                    Paragraph "Automate Health Check" -Style Heading1
-                    Paragraph "Generated on $(Get-Date -Format G)" -Style Heading2
-                    PageBreak
-                    TOC -Name "Overview"
-                    foreach ($category in ($config.Categories | Where-Object {$_.Enabled} | Sort-Object -Property "SortOrder")) {
-                        $thisCategoryResults = $results | Where-Object {$_.Category -eq $category.Name -and $_.ConnectionAlias -eq $c.Alias}
-                        if (($thisCategoryResults | Measure-Object).Count -gt 0) {
-                            PageBreak                            
-                            $categoryResultCount = (($thisCategoryResults | Where-Object {$_.Function -in $countedHealthChecks.Function}).Results | Measure-Object).Count
-                            if ($category.ShowCount) {
-                                $categoryHeader = "$($category.Name) : $categoryResultCount ($($config.CategoryCountInformationLevel) or above)"
-                            } else {
-                                $categoryHeader = $category.Name
-                            }
-                            Section $categoryHeader {
-                                foreach ($healthCheck in ($category.HealthChecks | Where-Object {$_.Enabled} | Sort-Object -Property "SortOrder")) {
-                                    $thisHealthCheckResult = $thisCategoryResults | Where-Object {$_.Function -eq $healthCheck.Function -and $_.ConnectionAlias -eq $c.Alias}
-                                    if (($thisHealthCheckResult | Measure-Object).Count -gt 0) {
-                                        LineBreak
-                                        $help = Get-Help -Name $thisHealthCheckResult.Function
-                                        $healthCheckResultCount = ($thisHealthCheckResult.Results | Measure-Object).Count
-                                        if ($healthCheck.ShowCount) {
-                                            $healthCheckHeader = "$($help.Synopsis) : $healthCheckResultCount"
-                                        } else {
-                                            $healthCheckHeader = $help.Synopsis
-                                        }
-                                        Section $healthCheckHeader {
-                                            Paragraph $help.Description.Text
-                                            if ($healthCheckResultCount -gt 0) {
-                                                switch ($thisHealthCheckResult.Results[0].GetType().FullName) {
-                                                    "AMHealthCheckItem" {
-                                                        $thisHealthCheckResult.Results | Table -Columns "Name","Value"
-                                                    }
-                                                    "AMConstructHealthCheckItem" {
-                                                        $thisHealthCheckResult.Results | Table -Columns "Name","Path","ID","Hint"
-                                                    }
-                                                }
-                                            }
-                                        } -Style "$($healthCheck.Importance)HealthCheckHeader"
-                                    } else {
-                                        Write-Warning "Could not find health check $($healthCheck.Function) in category $($category.Name) when formatting document!"
-                                    }
-                                }
-                            } -Style "Heading2"
-                        } else {
-                            Write-Warning "Could not find category $($category.Name) when formatting document!"
-                        }
-                    }
-                } | Export-Document -Format $OutputFormat -Path $OutputPath
-            } else {
-                Write-Error "Folder $OutputPath does not exist!"
             }
         }
     }

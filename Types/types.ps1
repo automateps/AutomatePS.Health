@@ -27,12 +27,16 @@ class AMHealthCheckItem {
 
 class AMHealthCheckResult {
     $Category
+    $Name
+    $Description
     $Function
     [AMHealthCheckImportance]$Importance
     $Results
     $ConnectionAlias
-    AMHealthCheckResult($Category, $Function, $Importance, $Results, $ConnectionAlias) {
+    AMHealthCheckResult($Category, $Name, $Description, $Function, $Importance, $Results, $ConnectionAlias) {
         $this.Category = $Category
+        $this.Name = $Name
+        $this.Description = $Description
         $this.Function = $Function
         $this.Importance = $Importance
         $this.Results = $Results
