@@ -1,313 +1,371 @@
 {
-    "CategoryCountInformationLevel": "Warning",
     "Categories": [
         {
             "Name": "General",
-            "ShowCount": false,
             "Enabled": true,
-            "SortOrder": 1,
+            "SortOrder": 100,
             "HealthChecks": [
                 {
+                    "Name": "Server Information",
+                    "Description": "Server Information",
                     "Function": "Get-AMHCServerInformation",
                     "Importance": "Information",
                     "ShowCount": false,
                     "Enabled": true,
-                    "SortOrder": 1
+                    "SortOrder": 100
                 }
             ]
         },
         {
             "Name": "Workflows",
-            "ShowCount": true,
             "Enabled": true,
-            "SortOrder": 2,
+            "SortOrder": 200,
             "HealthChecks": [
                 {
+                    "Name": "Disabled Workflows",
+                    "Description": "Workflows that are disabled",
                     "Function": "Get-AMHCDisabledWorkflow",
                     "Importance": "Information",
                     "ShowCount": true,
                     "Enabled": true,
-                    "SortOrder": 1
+                    "SortOrder": 100
                 },
                 {
+                    "Name": "Empty Workflows",
+                    "Description": "Workflows that don't contain any items",
                     "Function": "Get-AMHCEmptyWorkflow",
                     "Importance": "Warning",
                     "ShowCount": true,
                     "Enabled": true,
-                    "SortOrder": 2
+                    "SortOrder": 200
                 },
                 {
+                    "Name": "Recursive Workflows",
+                    "Description": "Workflows that contain themselves as an item (can cause infinite looping/possible server crash if exit condition does not exist)",
                     "Function": "Get-AMHCRecursiveWorkflow",
                     "Importance": "Warning",
                     "ShowCount": true,
                     "Enabled": true,
-                    "SortOrder": 3
+                    "SortOrder": 300
                 },
                 {
+                    "Name": "Workflows without Triggers or not Subworkflow",
+                    "Description": "Workflows that don't have any triggers, or are not subworkflows within another workflow",
                     "Function": "Get-AMHCWorkflowNoTrigger",
                     "Importance": "Information",
                     "ShowCount": true,
                     "Enabled": true,
-                    "SortOrder": 4
+                    "SortOrder": 400
                 },
                 {
+                    "Name": "Disabled Workflow Items",
+                    "Description": "Workflow items that are disabled",
                     "Function": "Get-AMHCDisabledWorkflowItem",
                     "Importance": "Information",
                     "ShowCount": true,
                     "Enabled": true,
-                    "SortOrder": 5
+                    "SortOrder": 500
                 },
                 {
+                    "Name": "Disconnected Workflow Items",
+                    "Description": "Workflow items that don't have any connected links",
                     "Function": "Get-AMHCDisconnectedWorkflowItem",
                     "Importance": "Warning",
                     "ShowCount": true,
                     "Enabled": true,
-                    "SortOrder": 6
+                    "SortOrder": 600
                 },
                 {
+                    "Name": "Unbuilt Workflows Items",
+                    "Description": "Workflows with unbuilt items",
                     "Function": "Get-AMHCUnbuiltWorkflowItem",
                     "Importance": "Error",
                     "ShowCount": true,
                     "Enabled": true,
-                    "SortOrder": 7
+                    "SortOrder": 700
                 },
                 {
+                    "Name": "Invalid Workflow Agent References",
+                    "Description": "Workflows that have items that reference non-existent agents (can happen when an agent is removed/added during upgrade)",
                     "Function": "Get-AMHCInvalidWorkflowAgent",
                     "Importance": "Error",
                     "ShowCount": true,
                     "Enabled": true,
-                    "SortOrder": 8
+                    "SortOrder": 800
                 },
                 {
+                    "Name": "Disconnected Workflow Links",
+                    "Description": "Workflow links that have one or both ends disconnected",
                     "Function": "Get-AMHCDisconnectedWorkflowLink",
                     "Importance": "Error",
                     "ShowCount": true,
                     "Enabled": true,
-                    "SortOrder": 9
+                    "SortOrder": 900
                 },
                 {
+                    "Name": "Duplicate Workflow Links",
+                    "Description": "Workflow links that are duplicated between two items (can cause unexpected multi-execution)",
                     "Function": "Get-AMHCDuplicateWorkflowLink",
                     "Importance": "Warning",
                     "ShowCount": true,
                     "Enabled": true,
-                    "SortOrder": 10
+                    "SortOrder": 1000
                 },
                 {
+                    "Name": "Workflows with Non-Result Links for Evaluation Objects",
+                    "Description": "Workflow evaluation objects that have any non-result links",
                     "Function": "Get-AMHCWorkflowEvaluationObjectNonResultLink",
                     "Importance": "Warning",
                     "ShowCount": true,
                     "Enabled": true,
-                    "SortOrder": 11
+                    "SortOrder": 1100
                 },
                 {
+                    "Name": "Workflows without Failure Links",
+                    "Description": "Workflows that don't have any failure links",
                     "Function": "Get-AMHCWorkflowNoFailureLink",
                     "Importance": "Information",
                     "ShowCount": true,
                     "Enabled": true,
-                    "SortOrder": 12
+                    "SortOrder": 1200
                 },
                 {
+                    "Name": "Duplicate Workflow Variables",
+                    "Description": "Workflow variables that have the same name within the same workflow",
                     "Function": "Get-AMHCDuplicateWorkflowVariable",
                     "Importance": "Error",
                     "ShowCount": true,
                     "Enabled": true,
-                    "SortOrder": 13
+                    "SortOrder": 1300
                 }
             ]
         },
         {
             "Name": "Tasks",
-            "ShowCount": true,
             "Enabled": true,
-            "SortOrder": 3,
+            "SortOrder": 300,
             "HealthChecks": [
                 {
+                    "Name": "Disabled Tasks",
+                    "Description": "Tasks that are disabled",
                     "Function": "Get-AMHCDisabledTask",
                     "Importance": "Information",
                     "ShowCount": true,
                     "Enabled": true,
-                    "SortOrder": 1
+                    "SortOrder": 100
                 },
                 {
+                    "Name": "Duplicate Tasks",
+                    "Description": "Tasks that have the same AML as another task",
                     "Function": "Get-AMHCDuplicateTask",
                     "Importance": "Information",
                     "ShowCount": true,
                     "Enabled": true,
-                    "SortOrder": 2
+                    "SortOrder": 200
                 },
                 {
+                    "Name": "Unused Tasks",
+                    "Description": "Tasks that are not used in any workflows",
                     "Function": "Get-AMHCUnusedTask",
                     "Importance": "Information",
                     "ShowCount": true,
                     "Enabled": true,
-                    "SortOrder": 3
+                    "SortOrder": 300
                 },
                 {
+                    "Name": "Tasks with AML non-comforming with XML",
+                    "Description": "Tasks with AML that cannot be converted to XML (this generally doesn't cause issues with Automate, but makes other AML health checks difficult)",
                     "Function": "Get-AMHCTaskAmlNotXml",
                     "Importance": "Warning",
                     "ShowCount": true,
                     "Enabled": true,
-                    "SortOrder": 4
+                    "SortOrder": 400
                 },
                 {
+                    "Name": "Old Task Versions",
+                    "Description": "Tasks whose version doesn't match the server version",
                     "Function": "Get-AMHCTaskVersionOld",
                     "Importance": "Warning",
                     "ShowCount": true,
                     "Enabled": true,
-                    "SortOrder": 5
+                    "SortOrder": 500
                 }
             ]
         },
         {
             "Name": "Conditions",
-            "ShowCount": true,
             "Enabled": true,
-            "SortOrder": 4,
+            "SortOrder": 400,
             "HealthChecks": [
                 {
+                    "Name": "Disabled Conditions",
+                    "Description": "Conditions that are disabled",
                     "Function": "Get-AMHCDisabledCondition",
                     "Importance": "Information",
                     "ShowCount": true,
                     "Enabled": true,
-                    "SortOrder": 1
+                    "SortOrder": 100
                 },
                 {
+                    "Name": "Unused Conditions",
+                    "Description": "Conditions that are not used in any workflows",
                     "Function": "Get-AMHCUnusedCondition",
                     "Importance": "Information",
                     "ShowCount": true,
                     "Enabled": true,
-                    "SortOrder": 2
+                    "SortOrder": 200
                 },
                 {
+                    "Name": "Invalid Schedule Launch Dates",
+                    "Description": "Schedules that have not computed a next launch date",
                     "Function": "Get-AMHCScheduleInvalidLaunchDate",
                     "Importance": "Warning",
                     "ShowCount": true,
                     "Enabled": true,
-                    "SortOrder": 3
+                    "SortOrder": 300
                 }
             ]
         },
         {
             "Name": "Processes",
-            "ShowCount": true,
             "Enabled": true,
-            "SortOrder": 5,
+            "SortOrder": 500,
             "HealthChecks": [
                 {
+                    "Name": "Disabled Processes",
+                    "Description": "Processes that are disabled",
                     "Function": "Get-AMHCDisabledProcess",
                     "Importance": "Information",
                     "ShowCount": true,
                     "Enabled": true,
-                    "SortOrder": 1
+                    "SortOrder": 100
                 },
                 {
+                    "Name": "Duplicate Processes",
+                    "Description": "Processes that have the same Command Line/Working Directory/Environment Variables/Running Context as another process",
                     "Function": "Get-AMHCDuplicateProcess",
                     "Importance": "Information",
                     "ShowCount": true,
                     "Enabled": true,
-                    "SortOrder": 2
+                    "SortOrder": 200
                 },
                 {
+                    "Name": "Unused Processes",
+                    "Description": "Processes that are not used in any workflows",
                     "Function": "Get-AMHCUnusedProcess",
                     "Importance": "Information",
                     "ShowCount": true,
                     "Enabled": true,
-                    "SortOrder": 3
+                    "SortOrder": 300
                 }
             ]
         },
         {
             "Name": "Agents",
-            "ShowCount": true,
             "Enabled": true,
-            "SortOrder": 6,
+            "SortOrder": 600,
             "HealthChecks": [
                 {
+                    "Name": "Disabled Agents",
+                    "Description": "Agents that are disabled",
                     "Function": "Get-AMHCDisabledAgent",
                     "Importance": "Information",
                     "ShowCount": true,
                     "Enabled": true,
-                    "SortOrder": 1
+                    "SortOrder": 100
                 },
                 {
+                    "Name": "Unused Agents",
+                    "Description": "Agents that are not used in any workflows, or are members of any agent groups",
                     "Function": "Get-AMHCUnusedAgent",
                     "Importance": "Information",
                     "ShowCount": true,
                     "Enabled": true,
-                    "SortOrder": 2
+                    "SortOrder": 200
                 },
                 {
+                    "Name": "Offline Agents",
+                    "Description": "Agents that are not connected to the management server",
                     "Function": "Get-AMHCOfflineAgent",
                     "Importance": "Warning",
                     "ShowCount": true,
                     "Enabled": true,
-                    "SortOrder": 3
+                    "SortOrder": 300
                 }
             ]
         },
         {
             "Name": "AgentGroups",
-            "ShowCount": true,
             "Enabled": true,
-            "SortOrder": 7,
+            "SortOrder": 700,
             "HealthChecks": [
                 {
+                    "Name": "Disabled Agent Groups",
+                    "Description": "Agent groups that are disabled",
                     "Function": "Get-AMHCDisabledAgentGroup",
                     "Importance": "Information",
                     "ShowCount": true,
                     "Enabled": true,
-                    "SortOrder": 1
+                    "SortOrder": 100
                 },
                 {
+                    "Name": "Empty Agent Groups",
+                    "Description": "Agent groups that don't have any members",
                     "Function": "Get-AMHCEmptyAgentGroup",
                     "Importance": "Information",
                     "ShowCount": true,
                     "Enabled": true,
-                    "SortOrder": 2
+                    "SortOrder": 200
                 },
                 {
+                    "Name": "Unused Agent Groups",
+                    "Description": "Agent groups that are not used in any workflows",
                     "Function": "Get-AMHCUnusedAgentGroup",
                     "Importance": "Information",
                     "ShowCount": true,
                     "Enabled": true,
-                    "SortOrder": 3
+                    "SortOrder": 300
                 }
             ]
         },
         {
             "Name": "Users",
-            "ShowCount": true,
             "Enabled": true,
-            "SortOrder": 8,
+            "SortOrder": 800,
             "HealthChecks": [
                 {
+                    "Name": "Users Without Access",
+                    "Description": "Users that have not been granted system permissions",
                     "Function": "Get-AMHCUsersNoAccess",
                     "Importance": "Information",
                     "ShowCount": true,
                     "Enabled": true,
-                    "SortOrder": 1
+                    "SortOrder": 100
                 }
             ]
         },
         {
             "Name": "UserGroups",
-            "ShowCount": true,
             "Enabled": true,
-            "SortOrder": 9,
+            "SortOrder": 900,
             "HealthChecks": [
                 {
+                    "Name": "Disabled User Groups",
+                    "Description": "User groups that are disabled",
                     "Function": "Get-AMHCDisabledUserGroup",
                     "Importance": "Information",
                     "ShowCount": true,
                     "Enabled": true,
-                    "SortOrder": 1
+                    "SortOrder": 100
                 },
                 {
+                    "Name": "Empty User Groups",
+                    "Description": "User groups that don't have any members",
                     "Function": "Get-AMHCEmptyUserGroup",
                     "Importance": "Information",
                     "ShowCount": true,
                     "Enabled": true,
-                    "SortOrder": 2
+                    "SortOrder": 200
                 }
             ]
         }
