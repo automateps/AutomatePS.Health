@@ -1,7 +1,7 @@
 function Get-AMHCOfflineAgent {
     <#
         .SYNOPSIS
-            Offline agents
+            Offline Agents
 
         .DESCRIPTION
             Agents that are not connected to the management server
