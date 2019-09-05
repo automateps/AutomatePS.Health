@@ -16,7 +16,7 @@ function Get-AMHCDuplicateTask {
         $Tasks
     )
 
-    $grouping = $Tasks | Group-Object AML
+    $grouping = $Tasks | Where-Object {-not [string]::IsNullOrEmpty($_.AML)} | Group-Object AML
     foreach ($group in ($grouping | Where-Object {$_.Count -gt 1})) {
         foreach ($task in $group.Group) {
             [AMConstructHealthCheckItem]::New($task, "Duplicates: $($group.Group.Name -join " ,")")
