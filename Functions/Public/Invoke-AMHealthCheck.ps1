@@ -35,6 +35,7 @@ function Invoke-AMHealthCheck {
         $objectCache[$c.Alias].Add("Tasks",        (Get-AMTask -Connection $c.Alias))
         $objectCache[$c.Alias].Add("Conditions",   (Get-AMCondition -Connection $c.Alias))
         $objectCache[$c.Alias].Add("Processes",    (Get-AMProcess -Connection $c.Alias))
+        $objectCache[$c.Alias].Add("Folders",      (Get-AMFolder -Connection $c.Alias))
         $objectCache[$c.Alias].Add("Agents",       (Get-AMAgent -Connection $c.Alias))
         $objectCache[$c.Alias].Add("SystemAgents", (Get-AMSystemAgent -Connection $c.Alias))
         $objectCache[$c.Alias].Add("AgentGroups",  (Get-AMAgentGroup -Connection $c.Alias))
