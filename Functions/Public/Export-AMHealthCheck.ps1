@@ -45,7 +45,7 @@ function Export-AMHealthCheck {
                 if (($thisCategoryResults | Measure-Object).Count -gt 0) {
                     PageBreak
                     Section $category {
-                        foreach ($healthCheck in ($HealthCheckResult | Where-Object {$_.Category -eq $category})) {
+                        foreach ($healthCheck in ($HealthCheckResult | Where-Object {$_.Category -eq $category -and $_.ConnectionAlias -eq $connection})) {
                             $thisHealthCheckResult = $thisCategoryResults | Where-Object {$_.Function -eq $healthCheck.Function -and $_.ConnectionAlias -eq $connection}
                             if (($thisHealthCheckResult | Measure-Object).Count -gt 0) {
                                 LineBreak
