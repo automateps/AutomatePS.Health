@@ -16,11 +16,11 @@ function Get-AMHCTaskVersionOld {
         $Tasks
     )
 
-    foreach ($task in $Tasks) {
+    foreach ($task in ($Tasks | Where-Object {-not [string]::IsNullOrEmpty($_.AML)})) {
         try {
             $xml = [xml]$task.AML
         } catch {
-            # Task_AML_Not_XML health check will report this
+            # Old Task Version health check will report this
             continue
         }
         $taskConnection = Get-AMConnection -Connection $task.ConnectionAlias
