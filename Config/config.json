@@ -155,13 +155,22 @@
                     "SortOrder": 100
                 },
                 {
+                    "Name": "Empty Tasks",
+                    "Description": "Tasks that have no steps defined",
+                    "Function": "Get-AMHCEmptyTask",
+                    "Importance": "Information",
+                    "ShowCount": true,
+                    "Enabled": true,
+                    "SortOrder": 200
+                },
+                {
                     "Name": "Duplicate Tasks",
                     "Description": "Tasks that have the same AML as another task",
                     "Function": "Get-AMHCDuplicateTask",
                     "Importance": "Information",
                     "ShowCount": true,
                     "Enabled": true,
-                    "SortOrder": 200
+                    "SortOrder": 300
                 },
                 {
                     "Name": "Unused Tasks",
@@ -170,7 +179,7 @@
                     "Importance": "Information",
                     "ShowCount": true,
                     "Enabled": true,
-                    "SortOrder": 300
+                    "SortOrder": 400
                 },
                 {
                     "Name": "Tasks with AML non-comforming with XML",
@@ -179,7 +188,7 @@
                     "Importance": "Warning",
                     "ShowCount": true,
                     "Enabled": true,
-                    "SortOrder": 400
+                    "SortOrder": 500
                 },
                 {
                     "Name": "Old Task Versions",
@@ -188,7 +197,7 @@
                     "Importance": "Warning",
                     "ShowCount": true,
                     "Enabled": true,
-                    "SortOrder": 500
+                    "SortOrder": 600
                 }
             ]
         },
