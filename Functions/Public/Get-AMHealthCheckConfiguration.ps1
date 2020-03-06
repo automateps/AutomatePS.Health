@@ -92,7 +92,9 @@ function Get-AMHealthCheckConfiguration {
         
                         # Process SortOrder property
                         if ($null -ne $healthCheck.SortOrder) {
-                            if ($healthCheck.SortOrder -is [int]) {
+                            if (($healthCheck.SortOrder -is [int16]) -or `
+                                ($healthCheck.SortOrder -is [int32]) -or `
+                                ($healthCheck.SortOrder -is [int64])) {
                                 $defaultHealthCheck.SortOrder = $healthCheck.SortOrder
                             } else {
                                 Write-Warning "Integer value not specified for SortOrder property in health check $($healthCheck.Name) in category $($category.Name)!"
