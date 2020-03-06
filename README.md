@@ -121,13 +121,13 @@ In the example below, a custom health check is defined in the Workflows category
             "Name": "Workflows",
             "HealthChecks": [
                 {
-					"Name": "Workflows without variables",
-					"Description": "Workflows that don't follow the naming standard",
-					"Function": "Get-WorkflowsWithoutVars",
-					"Importance": "Warning",
-					"ShowCount": true,
-					"Enabled": true,
-					"SortOrder": 10
+                    "Name": "Workflows without variables",
+                    "Description": "Workflows that don't follow the naming standard",
+                    "Function": "Get-WorkflowsWithoutVars",
+                    "Importance": "Warning",
+                    "ShowCount": true,
+                    "Enabled": true,
+                    "SortOrder": 10
                 }
             ]
         },
@@ -135,8 +135,8 @@ In the example below, a custom health check is defined in the Workflows category
             "Name": "Tasks",
             "HealthChecks": [
                 {
-					"Name": "Disabled Tasks",
-					"Enabled": false
+                    "Name": "Disabled Tasks",
+                    "Enabled": false
                 }
             ]
         },
