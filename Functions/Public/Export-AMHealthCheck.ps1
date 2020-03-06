@@ -7,19 +7,25 @@ function Export-AMHealthCheck {
             Export-AMHealthCheck exports Automate Enterprise health check results to a file.
 
         .PARAMETER HealthCheckResult
-            The health check results to export
+            The health check results to export.
+
+        .PARAMETER IncludeZeroResult
+            Include health checks with zero results, otherwise, don't include them.
 
         .PARAMETER OutputPath
-            The location to save the health check results
+            The location to save the health check results.
 
         .PARAMETER OutputFormat
-            The format to save the health check results in: HTML, Word, Text, XML
+            The format to save the health check results in: HTML, Word, Text, XML.
     #>
     [CmdletBinding()]
     param (
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
         $HealthCheckResult,
+
+        [ValidateNotNullOrEmpty()]
+        [switch]$IncludeZeroResult,
         
         [Parameter(Mandatory = $true)]
         [ValidateScript({Test-Path -Path $_})]
@@ -43,38 +49,46 @@ function Export-AMHealthCheck {
             foreach ($category in ($HealthCheckResult | Where-Object {$_.ConnectionAlias -eq $connection} | Group-Object Category).Name) {
                 $thisCategoryResults = $HealthCheckResult | Where-Object {$_.Category -eq $category -and $_.ConnectionAlias -eq $connection}
                 if (($thisCategoryResults | Measure-Object).Count -gt 0) {
-                    PageBreak
-                    Section $category {
-                        foreach ($healthCheck in ($HealthCheckResult | Where-Object {$_.Category -eq $category -and $_.ConnectionAlias -eq $connection})) {
-                            $thisHealthCheckResult = $thisCategoryResults | Where-Object {$_.Function -eq $healthCheck.Function -and $_.ConnectionAlias -eq $connection}
-                            if (($thisHealthCheckResult | Measure-Object).Count -gt 0) {
-                                LineBreak
-                                $healthCheckResultCount = ($thisHealthCheckResult.Results | Measure-Object).Count
-                                if ($healthCheck.ShowCount) {
-                                    $healthCheckHeader = "$($healthCheck.Name) : $healthCheckResultCount"
-                                } else {
-                                    $healthCheckHeader = $healthCheck.Name
-                                }
-                                Section $healthCheckHeader {
-                                    Paragraph $healthCheck.Description
-                                    if ($healthCheckResultCount -gt 0) {
-                                        switch ($thisHealthCheckResult.Results[0].GetType().FullName) {
-                                            "AMHealthCheckItem" {
-                                                $thisHealthCheckResult.Results | Table -Columns "Name","Value"
-                                            }
-                                            "AMConstructHealthCheckItem" {
-                                                $thisHealthCheckResult.Results | Table -Columns "Name","Path","ID","Hint"
-                                            }
+                    if (($thisCategoryResults.Results | Measure-Object).Count -gt 0 -or $IncludeZeroResult.IsPresent) {
+                        PageBreak
+                        Section $category {
+                            foreach ($healthCheck in ($HealthCheckResult | Where-Object {$_.Category -eq $category -and $_.ConnectionAlias -eq $connection})) {
+                                $thisHealthCheckResult = $thisCategoryResults | Where-Object {$_.Function -eq $healthCheck.Function -and $_.ConnectionAlias -eq $connection}
+                                if (($thisHealthCheckResult | Measure-Object).Count -gt 0) {
+                                    $healthCheckResultCount = ($thisHealthCheckResult.Results | Measure-Object).Count
+                                    if ($healthCheckResultCount -gt 0 -or $IncludeZeroResult.IsPresent) {
+                                        LineBreak
+                                        if ($healthCheck.ShowCount) {
+                                            $healthCheckHeader = "$($healthCheck.Name) : $healthCheckResultCount"
+                                        } else {
+                                            $healthCheckHeader = $healthCheck.Name
                                         }
+                                        Section $healthCheckHeader {
+                                            Paragraph $healthCheck.Description
+                                            if ($healthCheckResultCount -gt 0) {
+                                                switch ($thisHealthCheckResult.Results[0].GetType().FullName) {
+                                                    "AMHealthCheckItem" {
+                                                        $thisHealthCheckResult.Results | Table -Columns "Name","Value"
+                                                    }
+                                                    "AMConstructHealthCheckItem" {
+                                                        $thisHealthCheckResult.Results | Table -Columns "Name","Path","ID","Hint"
+                                                    }
+                                                }
+                                            }
+                                        } -Style "$($healthCheck.Importance)HealthCheckHeader"
+                                    } else {
+                                        Write-Verbose "Health check $($healthCheck.Function) in category $($category) returned no results, will skip."
                                     }
-                                } -Style "$($healthCheck.Importance)HealthCheckHeader"
-                            } else {
-                                Write-Warning "Could not find health check $($healthCheck.Function) in category $($category.Name) when formatting document!"
+                                } else {
+                                    Write-Warning "Could not find health check $($healthCheck.Function) in category $($category) when formatting document!"
+                                }
                             }
-                        }
-                    } -Style "Heading2"
+                        } -Style "Heading2"
+                    } else {
+                        Write-Verbose "Category $($category) had no health checks return any results, will skip."
+                    }
                 } else {
-                    Write-Warning "Could not find category $($category.Name) when formatting document!"
+                    Write-Warning "Could not find category $($category) when formatting document!"
                 }
             }
         } | Export-Document -Format $OutputFormat -Path $OutputPath

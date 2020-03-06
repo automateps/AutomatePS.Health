@@ -33,12 +33,22 @@ Connect-AMServer "AMserver01" -Credential $myCredential -ConnectionAlias dev
 
 To execute the health check against all connected servers:
 ```PowerShell
-Invoke-AMHealthCheck -OutputPath "C:\temp" -OutputFormat Html,Word -Verbose
+$health = Invoke-AMHealthCheck
 ```
 
 To execute the health check against a single server:
 ```PowerShell
-Invoke-AMHealthCheck -OutputPath "C:\temp" -OutputFormat Html,Word -Connection dev -Verbose
+$health = Invoke-AMHealthCheck -Connection dev
+```
+
+To export health checks that returned results:
+```PowerShell
+Export-AMHealthCheck -HealthCheckResult $health -OutputPath "C:\temp" -OutputFormat Html,Word
+```
+
+To export all health checks (including those without results):
+```PowerShell
+Export-AMHealthCheck -HealthCheckResult $health -OutputPath "C:\temp" -OutputFormat Html,Word -IncludeZeroResult
 ```
 
 ----------
@@ -47,7 +57,7 @@ Enabling and Disabling Health Checks
 To disable a health check, open config.json, locate the desired health check and set "Enabled" to "false".  Set back to "true" to re-enable.
 
 ----------
-Adding Custom Health Checks to the Module
+Adding Custom Health Checks to this Module
 -------------
 
 To add a custom health check, create a function:
@@ -98,3 +108,42 @@ $Repository # All workflows/tasks/processes/conditions
 Save the new function under Functions\HealthCheck in the module directory.  The sub-folders in HealthCheck are simply organizational, and have no impact on how the health check operates.  Finally, config.json will need to be modified to reflect the new health check.
 
 ----------
+
+Building a Custom Config.json
+-------------
+If it is preferred not to edit the config.json in this module, a custom config.json can be built using the same structure.  This custom config.json can then be fed into Invoke-AMHealthCheck -CustomConfigPath, and any settings defined for built-in health checks will override those in the config.json included in this module.  This way, minor modifications can be completed easily without replicating the entire default config.json.
+
+In the example below, a custom health check is defined in the Workflows category named "Workflows without variables", the "Disabled Tasks" health check in the "Tasks" category is disabled, and the entire "Processes" category is disabled.  This example depends on the function Get-WorkflowsWithoutVars being loaded in the PowerShell session.
+```json
+{
+    "Categories": [
+        {
+            "Name": "Workflows",
+            "HealthChecks": [
+                {
+                    "Name": "Workflows without variables",
+                    "Description": "Workflows that don't follow the naming standard",
+                    "Function": "Get-WorkflowsWithoutVars",
+                    "Importance": "Warning",
+                    "ShowCount": true,
+                    "Enabled": true,
+                    "SortOrder": 10
+                }
+            ]
+        },
+        {
+            "Name": "Tasks",
+            "HealthChecks": [
+                {
+                    "Name": "Disabled Tasks",
+                    "Enabled": false
+                }
+            ]
+        },
+        {
+            "Name": "Processes",
+            "Enabled": false
+        }
+    ]
+}
+```
