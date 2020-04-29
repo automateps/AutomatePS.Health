@@ -137,6 +137,15 @@
                     "ShowCount": true,
                     "Enabled": true,
                     "SortOrder": 1300
+                },
+                {
+                    "Name": "Workflow Variable Names with New Line Character",
+                    "Description": "Workflow variables that have a new line character in the name",
+                    "Function": "Get-AMHCWorkflowVariableNewLine",
+                    "Importance": "Error",
+                    "ShowCount": true,
+                    "Enabled": true,
+                    "SortOrder": 1400
                 }
             ]
         },
