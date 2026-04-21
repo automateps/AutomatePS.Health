@@ -20,14 +20,13 @@ function Get-AMHCTaskVersionOld {
         try {
             $xml = [xml]$task.AML
         } catch {
-            # Old Task Version health check will report this
+            # Get-AMHCTaskAmlNotXml health check will report this, so skip it.
             continue
         }
         $taskConnection = Get-AMConnection -Connection $task.ConnectionAlias
         switch ($taskConnection.Version.Major) {
-            10 {$taskVersion = $xml.AMTASK.AMTASKHEAD.TASKINFO.TASKVERSION}
-            11 {$taskVersion = $xml.AutomateTask.TaskInfo.Version.TaskVersion}
-            22 {$taskVersion = $xml.AutomateTask.TaskInfo.Version.TaskVersion}
+            10      {$taskVersion = $xml.AMTASK.AMTASKHEAD.TASKINFO.TASKVERSION}
+            default {$taskVersion = $xml.AutomateTask.TaskInfo.Version.TaskVersion}
         }
         if ([Version]$taskVersion -ne $taskConnection.Version) {
             [AMConstructHealthCheckItem]::New($task, "Task version: $taskVersion")
